@@ -22,6 +22,10 @@ class Settings:
     context_size: int = int(
         os.getenv("MODEL_CONTEXT_SIZE", "4096")
     )
+    embedding_model: str = os.getenv(
+        "OLLAMA_EMBEDDING_MODEL",
+        "embeddinggemma",
+    )
 
 
 settings = Settings()
