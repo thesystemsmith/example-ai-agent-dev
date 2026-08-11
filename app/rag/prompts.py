@@ -11,6 +11,9 @@ Rules:
 - Use a practical example when appropriate.
 - Cite supporting information using the exact source labels provided.
 - Do not invent facts or source labels.
+- Output only the final user-facing answer.
+- Never expose internal reasoning or planning.
+- Keep the answer under 150 words.
 - If the context does not contain the answer, say:
   "I could not find this information in the provided notes."
 """
