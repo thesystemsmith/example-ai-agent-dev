@@ -1,37 +1,51 @@
 from app.agent.service import LearningAgent
 
 
+THREAD_ID = "local-learning-session"
+
+
 def main() -> None:
-    print("Local Tool-Using Learning Agent")
-
-    question = input("\nAsk the agent: ").strip()
-
-    if not question:
-        print("Please provide a question.")
-        return
+    print("Local Stateful Learning Agent")
+    print("Type 'exit' to stop.")
 
     try:
-        # EXPLAIN: This builds the knowledge index once.
+        # KEEP: Build the index and agent only once.
         agent = LearningAgent.from_directory(
             "documents"
         )
-
-        result = agent.ask(question)
-
-        print(f"\nAnswer:\n{result.answer}")
-
-        print("\n--- Agent trace ---")
-
-        if result.tools_used:
-            print(
-                "Tools used: "
-                + ", ".join(result.tools_used)
-            )
-        else:
-            print("Tools used: none")
-
     except Exception as error:
-        print(f"\nAgent request failed: {error}")
+        print(f"\nAgent startup failed: {error}")
+        return
+
+    while True:
+        question = input("\nYou: ").strip()
+
+        if question.lower() in {"exit", "quit"}:
+            print("Goodbye.")
+            return
+
+        if not question:
+            print("Please provide a question.")
+            continue
+
+        try:
+            result = agent.ask(
+                question,
+                thread_id=THREAD_ID,
+            )
+
+            print(f"\nAgent:\n{result.answer}")
+
+            if result.tools_used:
+                print(
+                    "\nTools used: "
+                    + ", ".join(result.tools_used)
+                )
+            else:
+                print("\nTools used: none")
+
+        except Exception as error:
+            print(f"\nAgent request failed: {error}")
 
 
 if __name__ == "__main__":
